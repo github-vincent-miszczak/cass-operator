@@ -13,6 +13,7 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/go-logr/logr"
@@ -48,17 +49,17 @@ func buildEndpoint(path string, queryParams ...string) string {
 }
 
 type EndpointState struct {
-	HostID                 string `json:"HOST_ID"`
-	IsAlive                string `json:"IS_ALIVE"`
-	NativeTransportAddress string `json:"NATIVE_TRANSPORT_ADDRESS"`
-	RpcAddress             string `json:"RPC_ADDRESS"`
-	Status                 string `json:"STATUS"`
-	Load                   string `json:"LOAD"`
+	HostID               string `json:"HOST_ID"`
+	IsAlive              string `json:"IS_ALIVE"`
+	NativeAddressAndPort string `json:"NATIVE_ADDRESS_AND_PORT"`
+	RpcAddress           string `json:"RPC_ADDRESS"`
+	Status               string `json:"STATUS"`
+	Load                 string `json:"LOAD"`
 }
 
 func (x *EndpointState) GetRpcAddress() string {
-	if x.NativeTransportAddress != "" {
-		return x.NativeTransportAddress
+	if x.NativeAddressAndPort != "" {
+		return strings.Split(x.NativeAddressAndPort, ":")[0]
 	} else {
 		return x.RpcAddress
 	}
